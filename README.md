@@ -191,7 +191,7 @@ Arguably one of the more exciting features of React's Concurrent Mode is [Suspen
 
 ReactFire uses the Suspense API in order to make "contracts" with React to provided an asyncronous friendly experience.
 
-Suspense allows developers to easily specifiy a "loading" state while waiting on asyncronous tasks. In other words, when we have an action that is considered "blocking", such as a request for data, we must provided a "non-blocking" version. This non-blocking version is called a "fallback" in Suspense.
+Suspense allows developers to easily specifiy a "loading" state while waiting on asyncronous tasks. In other words, when we have an action that is considered "blocking", such as a request for data, we must provide a "non-blocking" version. This non-blocking version is called a "fallback" in Suspense.
 
 The error above tells us that the `AuthenticationButtons` component was suspended (or "blocked") while rendering and that a fallback (or "non-blocking" path) was not provided.
 
@@ -216,7 +216,7 @@ The application should start and allow a user to login and logout.
 
 ## 7. SuspenseWithPerf
 
-ReactFire provideds an abstraction of Firebase Performance with the `SuspenseWithPerf` component.
+ReactFire provides an abstraction of Firebase Performance with the `SuspenseWithPerf` component.
 
 > SuspenseWithPerf starts a Firebase Performance Monitoring trace and ends it when suspense stops suspending.
 
