@@ -1,68 +1,377 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Firebase Firelobby
 
-## Available Scripts
+## Goal
 
-In the project directory, you can run:
+Our goal is to make a React app that will simulate a game lobby, where participants can login, join the lobby, and set themselves as "ready" or "not ready". This tutorial will be using [ReactFire](https://github.com/FirebaseExtended/reactfire) and [React Concurrent Mode.](https://reactjs.org/docs/concurrent-mode-intro.html).
 
-### `yarn start`
+**_Warning_**: At the time of creation, React Concurrent Mode is marked as experimental and is _not_ suitable for production applications.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## End Result
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+![screenshot](./screenshots/screenshot.png)
 
-### `yarn test`
+## Steps
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 1. Generate a new React application
 
-### `yarn build`
+> This can also be seen on the [Reactfire quickstart guide](https://github.com/FirebaseExtended/reactfire).
+> Prerequisite: make sure you have [Node.js](https://nodejs.org/en/) installed.
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```shell
+npx create-react-app firelobby
+cd firelobyy
+```
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+Install React Experimental Build
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```shell
+yarn add react@experimental react-dom@experimental
+```
 
-### `yarn eject`
+## 2. Install ReactFire and Bulma CSS
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```bash
+yarn add firebase reactfire
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+yarn add bulma
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## 3. Activate Reacts Concurrent Mode
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### What Is Concurrent Mode?
 
-## Learn More
+> Concurrent Mode is a set of new features that help React apps stay responsive and gracefully adjust to the user’s device capabilities and network speed.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### How to enable concurrent mode
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+You are free to delete everything in the `./src` directory except `index.js`.
+In order to enable concurrent mode, the way the React application is initialized must be changed. Concurrent mode makes use of `createRoot` from `react-dom`.
 
-### Code Splitting
+```javascript
+import 'bulma/css/bulma.css';
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+import React from 'react';
+import { createRoot } from 'react-dom';
 
-### Analyzing the Bundle Size
+function App() {
+  return <div>Hello World!</div>;
+}
+createRoot(document.getElementById('root')).render(<App />);
+```
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+Using `createRoot`, React will render your Application on the element with the `root` id in `./public/index.html` which was generated with `create-react-app`.
 
-### Making a Progressive Web App
+## 4. Create the FirebaseConfigProvider
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+Reactfire makes strong use of the React [Context](https://reactjs.org/docs/context.html) and [Hooks](https://reactjs.org/docs/hooks-reference.html) API in order to provide reusable features of the firebase API. `FirebaseAppProvider` is a React Provider that will provide the firebase config to the component tree.
 
-### Advanced Configuration
+First, we create a firebase config in `index.js` and surround our application with the `FirebaseAppProvider` component
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+```javascript
+/// omitted
 
-### Deployment
+const firebaseConfig = {
+  // Retrieved from the firebase console
+};
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+function App() {
+  return (
+    <FirebaseAppProvider firebaseConfig={firebaseConfig}>
+      <div>Hello World!</div>
+    </FirebaseAppProvider>
+  );
+}
+/// omitted
+```
 
-### `yarn build` fails to minify
+Now our component tree within `FirebaseAppProvider` will have access to the hooks created in ReactFire.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+## 5. Authentication
+
+First, we will create an `AuthenticationButtons` component that will be repsonsible for enabling users to sign-in and sign-out of the application.
+
+```javascript
+import firebase from 'firebase';
+
+import React from 'react';
+import { createRoot } from 'react-dom';
+import { AuthCheck, FirebaseAppProvider, useAuth } from 'reactfire';
+
+// Omitted
+
+function AuthenticationButtons() {
+  const auth = useAuth();
+  const signIn = async () => {
+    await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+  };
+  const signOut = async () => {
+    await auth.signOut();
+  };
+  // When authenticated, show the Sign out button, else Sign in
+  return (
+    <AuthCheck
+      fallback={
+        <button className='button is-primary' onClick={signIn}>
+          Sign In
+        </button>
+      }
+    >
+      <button className='button is-info' onClick={signOut}>
+        Sign Out
+      </button>
+    </AuthCheck>
+  );
+}
+// Omitted
+```
+
+`useAuth` is a hook provided by ReactFire which, when called within `FirebaseAppProvider`, will lazy load the Auth feature from Firebase.
+
+`AuthCheck` is a component that will render its children whenever the user is authenticated, otherwise it will render JSX passed into the `fallback` prop. This is the same pattern used by the React Concurrent mode feature called `Suspense`, which will be used momentarily.
+
+Next, we will add our new component to a nav bar and add that navbar to the main App function.
+
+```javascript
+/// omitted
+function Navbar() {
+  return (
+    <nav className='navbar'>
+      <div className='navbar-brand'>Fire Lobby 🔥</div>
+      <div className='navbar-menu'>
+        <div className='navbar-start'></div>
+        <div className='navbar-end'>
+          <div className='navbar-item'>
+            <div className='buttons'>
+              <AuthenticationButtons />
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+  );
+}
+/// omitted
+```
+
+```javascript
+import 'bulma/css/bulma.css';
+
+import firebase from 'firebase';
+import React from 'react';
+import { createRoot } from 'react-dom';
+import { AuthCheck, FirebaseAppProvider, useAuth, SuspenseWithPerf } from 'reactfire';
+
+/// omitted
+function App() {
+  return (
+    <FirebaseAppProvider firebaseConfig={firebaseConfig}>
+      <Navbar />
+      <div>Hello World!</div>
+    </FirebaseAppProvider>
+  );
+}
+/// omitted
+```
+
+Now run the app with `yarn start`. The application should fail to render, throwing this error in the console.
+
+```
+Uncaught Error: AuthenticationButtons suspended while rendering, but no fallback UI was specified.
+
+Add a <Suspense fallback=...> component higher in the tree to provide a loading indicator or placeholder to display.
+```
+
+## 6. Suspense
+
+Arguably one of the more exciting features of React's Concurrent Mode is [Suspense](https://reactjs.org/docs/concurrent-mode-suspense.html).
+
+> Disclaimer, there are a lot of nuances and concepts behind Concurrent Mode and Suspense that are not exclusive to React and could be considered advanced topics. I highly recommend [this article](https://www.swyx.io/writing/react-outside/) and the React Suspense [presentation](https://www.swyx.io/speaking/react-suspense/) linked within it.
+
+ReactFire uses the Suspense API in order to make "contracts" with React to provided an asyncronous friendly experience.
+
+Suspense allows developers to easily specifiy a "loading" state while waiting on asyncronous tasks. In other words, when we have an action that is considered "blocking", such as a request for data, we must provided a "non-blocking" version. This non-blocking version is called a "fallback" in Suspense.
+
+The error above tells us that the `AuthenticationButtons` component was suspended (or "blocked") while rendering and that a fallback (or "non-blocking" path) was not provided.
+
+We will add `Suspense` with a fallback to our component tree.
+
+```javascript
+// Omitted
+function App() {
+  return (
+    <FirebaseAppProvider firebaseConfig={firebaseConfig}>
+      <Suspense fallback={<p>Loading...</p>}>
+        <Navbar />
+        <div>Hello World!</div>
+      </Suspense>
+    </FirebaseAppProvider>
+  );
+}
+// Omitted
+```
+
+The application should start and allow a user to login and logout.
+
+## 7. SuspenseWithPerf
+
+ReactFire provideds an abstraction of Firebase Performance with the `SuspenseWithPerf` component.
+
+> SuspenseWithPerf starts a Firebase Performance Monitoring trace and ends it when suspense stops suspending.
+
+```javascript
+// Omitted
+function App() {
+  return (
+    <FirebaseAppProvider firebaseConfig={firebaseConfig}>
+      <SuspenseWithPerf fallback={<p>Loading...</p>} traceId={'loading-app-status'}>
+        <Navbar />
+        <div>Hello World!</div>
+      </SuspenseWithPerf>
+    </FirebaseAppProvider>
+  );
+}
+// Omitted
+```
+
+## 8. Firestore Lobby
+
+Next, we will create our Lobby collection and add our user to the collection.
+We will create a new function for our lobby and use ReactFire to subscribe to a document reference. We will also wrap our lobby component in an `AuthCheck`, like we did with the `AuthenticationButtons` component.
+
+```javascript
+import {
+  AuthCheck,
+  FirebaseAppProvider,
+  SuspenseWithPerf,
+  useAuth,
+  useFirestore,
+  useFirestoreCollectionData
+} from 'reactfire';
+
+// Omitted
+
+function Lobby() {
+  const lobbyCollection = useFirestore().collection('lobby');
+  const lobby = useFirestoreCollectionData(lobbyCollection);
+
+  return (
+    <div className='container is-fluid'>
+      {lobby.map(m => {
+        return (
+          <article key={m.email} className='tile is-child notification'>
+            <p className='title'>
+              {m.displayName} - {m.ready ? 'Ready 🎮' : 'Not Ready ❌'}
+            </p>
+          </article>
+        );
+      })}
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <FirebaseAppProvider firebaseConfig={firebaseConfig}>
+      <SuspenseWithPerf fallback={<p>Loading...</p>} traceId={'loading-app-status'}>
+        <Navbar />
+        <AuthCheck fallback={<p>Not Logged In...</p>}>
+          <Lobby></Lobby>
+        </AuthCheck>
+      </SuspenseWithPerf>
+    </FirebaseAppProvider>
+  );
+}
+// Omitted
+```
+
+`useFirestore` allows us to lazily load the firestore feature from firebase, using the config provided by `FirebaseAppProvider`. This returns `firebase.firestore`.
+
+`useFirestoreCollectionData` is a hook that allows our components to subscribe to the changes within the firestore collection.
+
+Once we create a subscription to the firestore collection, we map the list of documents to some UI for our component to render dynamically.
+
+## 9. Wrapping up the lobby
+
+Now that we would have a list of users in the lobby, we have a handful of interactions we need to create in order to join and leave lobby, as well as a function to mark our user as "ready" or "not ready".
+
+We will create functions and action buttons to join and leave the lobby as well as a function to change the readiness of our user within the lobby. We will also create a variable to determine if our user is currently in the lobby, which will drive what buttons we show and hide.
+
+```javascript
+// Omitted
+
+import {
+  AuthCheck,
+  FirebaseAppProvider,
+  SuspenseWithPerf,
+  useAuth,
+  useFirestore,
+  useFirestoreCollectionData,
+  useUser
+} from 'reactfire';
+
+// Omitted
+
+function Lobby() {
+  const { email, displayName, uid } = useUser();
+
+  const lobbyCollection = useFirestore().collection('lobby');
+  const lobby = useFirestoreCollectionData(lobbyCollection);
+  const userInLobby = lobby.find(m => m.email === email);
+
+  const joinLobby = async () => {
+    await lobbyCollection.doc(uid).set({ email, displayName, ready: false });
+  };
+
+  const leaveLobby = async () => {
+    await lobbyCollection.doc(uid).delete();
+  };
+
+  const toggleReadiness = async newReadiness => {
+    await lobbyCollection.doc(uid).set({ ready: newReadiness }, { merge: true });
+  };
+
+  return (
+    <div className='container is-fluid'>
+      {lobby.map(m => {
+        return (
+          <article key={m.email} className='tile is-child notification'>
+            <p className='title'>
+              {m.displayName} - {m.ready ? 'Ready 🎮' : 'Not Ready ❌'}
+            </p>
+          </article>
+        );
+      })}
+      <div className='columns'>
+        {userInLobby && (
+          <div className='column is-1'>
+            <button className='button is-primary' onClick={() => toggleReadiness(!userInLobby.ready)}>
+              {userInLobby.ready ? 'Not Ready!' : 'Ready!'}
+            </button>
+          </div>
+        )}
+        <div className='column is-1'>
+          {userInLobby ? (
+            <button className='button is-primary' onClick={leaveLobby}>
+              Leave
+            </button>
+          ) : (
+            <button className='button is-primary' onClick={joinLobby}>
+              Join
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Omitted
+```
+
+`useUser` is the only new ReactFire method used here. It allows your component to subscribe the authenticated user data in the `firebase.auth` feature.
+
+We should now be able to join and leave our lobby, as well as mark ourselves as "ready" or "not ready", all while reliably handling blocking actions with non-blocking alternatives.
+
+## 10. Extra Credit
