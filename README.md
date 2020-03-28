@@ -294,7 +294,7 @@ Once we create a subscription to the firestore collection, we map the list of do
 
 ## 9. Wrapping up the lobby
 
-Now that we would have a list of users in the lobby, we have a handful of interactions we need to create in order to join and leave lobby, as well as a function to mark our user as "ready" or "not ready".
+Now that we would have a list of users in the lobby, we have a handful of interactions we need to create in order to join and leave our lobby, as well as a function to mark our user as "ready" or "not ready".
 
 We will create functions and action buttons to join and leave the lobby as well as a function to change the readiness of our user within the lobby. We will also create a variable to determine if our user is currently in the lobby, which will drive what buttons we show and hide.
 
