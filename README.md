@@ -315,9 +315,9 @@ import {
 
 function Lobby() {
   const { email, displayName, uid } = useUser();
-
   const lobbyCollection = useFirestore().collection('lobby');
   const lobby = useFirestoreCollectionData(lobbyCollection);
+
   const userInLobby = lobby.find(m => m.email === email);
 
   const joinLobby = async () => {
