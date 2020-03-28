@@ -2,7 +2,7 @@
 
 ## Goal
 
-Our goal is to make a simple React app that showcases ReactFire and React's new Conccurent Mode. This application will simulate a game lobby, where participants can login, join the lobby, and set themselves as "ready" or "not ready". This tutorial will be using [ReactFire](https://github.com/FirebaseExtended/reactfire) and [React Concurrent Mode.](https://reactjs.org/docs/concurrent-mode-intro.html).
+Our goal is to make a simple React app that showcases ReactFire and React's new Concurrent Mode. This application will simulate a game lobby, where participants can login, join the lobby, and set themselves as "ready" or "not ready". This tutorial will be using [ReactFire](https://github.com/FirebaseExtended/reactfire) and [React Concurrent Mode.](https://reactjs.org/docs/concurrent-mode-intro.html).
 
 **_Warning_**: At the time of creation, React Concurrent Mode is marked as experimental and is _not_ suitable for production applications.
 
