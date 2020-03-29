@@ -76,6 +76,10 @@ Reactfire makes strong use of the React [Context](https://reactjs.org/docs/conte
 First, we create a firebase config in `index.js` and surround our application with the `FirebaseAppProvider` component
 
 ```javascript
+// Omitted
+
+import { FirebaseAppProvider } from 'reactfire';
+
 /// Omitted
 
 const firebaseConfig = {
@@ -170,6 +174,7 @@ import { createRoot } from 'react-dom';
 import { AuthCheck, FirebaseAppProvider, useAuth, SuspenseWithPerf } from 'reactfire';
 
 /// Omitted
+
 function App() {
   return (
     <FirebaseAppProvider firebaseConfig={firebaseConfig}>
@@ -178,6 +183,7 @@ function App() {
     </FirebaseAppProvider>
   );
 }
+
 /// Omitted
 ```
 
@@ -205,6 +211,7 @@ We will add `Suspense` with a fallback to our component tree.
 
 ```javascript
 // Omitted
+
 function App() {
   return (
     <FirebaseAppProvider firebaseConfig={firebaseConfig}>
@@ -215,6 +222,7 @@ function App() {
     </FirebaseAppProvider>
   );
 }
+
 // Omitted
 ```
 
@@ -228,6 +236,7 @@ ReactFire provides an abstraction of Firebase Performance with the `SuspenseWith
 
 ```javascript
 // Omitted
+
 function App() {
   return (
     <FirebaseAppProvider firebaseConfig={firebaseConfig}>
@@ -238,6 +247,7 @@ function App() {
     </FirebaseAppProvider>
   );
 }
+
 // Omitted
 ```
 
@@ -289,6 +299,7 @@ function App() {
     </FirebaseAppProvider>
   );
 }
+
 // Omitted
 ```
 
@@ -300,9 +311,7 @@ Once we create a subscription to the firestore collection, we map the list of do
 
 ## 9. Wrapping up the lobby
 
-Now that we would have a list of users in the lobby, we have a handful of interactions we need to create in order to join and leave our lobby, as well as a function to mark our user as "ready" or "not ready".
-
-We will create functions and action buttons to join and leave the lobby, as well as a function to change the readiness of our user within the lobby. We will also create a variable to determine if our user is currently in the lobby, which will drive what buttons we show and hide.
+Now that we would have a list of users in the lobby, we have a handful of interactions we need. We will create functions and action buttons to join and leave the lobby, as well as a function to change the readiness of our user within the lobby. We will also create a variable to determine if our user is currently in the lobby, which will drive which buttons we show and hide.
 
 ```javascript
 // Omitted
@@ -474,7 +483,9 @@ function LobbyActions() {
 }
 ```
 
-Previously, we used ternaries and boolean expressions to determine what UI to render. Here, we are creating a component array and conditionally adding JSX to the array. Finally, we map it in our return JSX. This gives you an idea of how flexible and powerful React's rendering can be.
+Previously, we used ternaries and expressions to determine what UI to render. Here, we are creating a component array and conditionally adding JSX to the array. Lastly, we map it in our return JSX.
+
+This gives you an idea of how flexible and powerful React's rendering can be.
 
 ## The End!
 
