@@ -71,7 +71,7 @@ Using `createRoot`, React will render your Application on the element with the `
 
 ## 4. Create the FirebaseConfigProvider
 
-Reactfire makes strong use of the React [Context](https://reactjs.org/docs/context.html) and [Hooks](https://reactjs.org/docs/hooks-reference.html) API in order to provide reusable features of the firebase API. `FirebaseAppProvider` is a React Provider that will provide the firebase config to the component tree.
+Reactfire makes strong use of the React [Context](https://reactjs.org/docs/context.html) and [Hooks](https://reactjs.org/docs/hooks-reference.html) API in order to provide reusable features of the firebase API. `FirebaseAppProvider` is a [React Provider](https://reactjs.org/docs/context.html#contextprovider) that will provide the firebase config to the component tree.
 
 First, we create a firebase config in `index.js` and surround our application with the `FirebaseAppProvider` component
 
@@ -393,7 +393,7 @@ We should now be able to join and leave our lobby, as well as mark ourselves as 
 
 In this extra step, we will refactor our methods and data for the lobby using the Context API. This is one way to centralize our lobby data and the methods for interacting with the lobby. This refactor would allow us to split our lobby component up without having to pass props down the tree.
 
-First, we create a LobbyContext and a component to provide that context.
+First, we create a LobbyContext using [`createContext`](https://reactjs.org/docs/context.html#reactcreatecontext) and a component to provide that context.
 
 ```javascript
 const LobbyContext = React.createContext();
@@ -425,7 +425,7 @@ function LobbyProvider(props) {
 }
 ```
 
-Next, we will use the `useContext` hook and split our lobby component into two components. Here, I have explored a different pattern for dynamically adding components to the `LobbyActions` component.
+Next, we will use the [`useContext`](https://reactjs.org/docs/hooks-reference.html#usecontext) hook and split our lobby component into two components. Here, I have explored a different pattern for dynamically adding components to the `LobbyActions` component.
 
 ```javascript
 function Lobby() {
