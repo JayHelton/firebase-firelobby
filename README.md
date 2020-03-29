@@ -456,14 +456,14 @@ function LobbyActions() {
 
   if (userInLobby) {
     components.push(
-      <div className='column is-1'>
-        <button className='button is-primary' onClick={() => toggleReadiness(!userInLobby.ready)}>
+      <div key='readyButton' className='column is-1'>
+        <button key='readyButton' className='button is-primary' onClick={() => toggleReadiness(!userInLobby.ready)}>
           {userInLobby.ready ? 'Not Ready!' : 'Ready!'}
         </button>
       </div>
     );
     components.push(
-      <div className='column is-1'>
+      <div key='leaveButton' className='column is-1'>
         <button className='button is-primary' onClick={leaveLobby}>
           Leave
         </button>
@@ -471,7 +471,7 @@ function LobbyActions() {
     );
   } else {
     components.push(
-      <div className='column is-1'>
+      <div key='joinButton' className='column is-1'>
         <button className='button is-primary' onClick={joinLobby}>
           Join
         </button>
@@ -481,13 +481,32 @@ function LobbyActions() {
 
   return (
     <div className='container is-fluid'>
-      <div className='columns'>{components.map(c => c)}</div>
+      <div className='columns'>{components}</div>
     </div>
   );
 }
+
+// Omitted
+
+function App() {
+  return (
+    <FirebaseAppProvider firebaseConfig={firebaseConfig}>
+      <SuspenseWithPerf fallback={<p>Loading...</p>} traceId={'loading-app-status'}>
+        <Navbar />
+        <AuthCheck fallback={<p>Not Logged In...</p>}>
+          <LobbyProvider>
+            <Lobby></Lobby>
+            <LobbyActions />
+          </LobbyProvider>
+        </AuthCheck>
+      </SuspenseWithPerf>
+    </FirebaseAppProvider>
+  );
+
+// Omitted
 ```
 
-Previously, we used ternaries and expressions to determine what UI to render. Here, we are creating a component array and conditionally adding JSX to the array. Lastly, we map it in our return JSX.
+Previously, we used ternaries and expressions to determine what UI to render. Here, we are creating a component array and conditionally adding JSX to the array. Lastly, we use our components array in the JSX.
 
 This gives you an idea of how flexible and powerful React's rendering can be.
 

@@ -118,14 +118,14 @@ function LobbyActions() {
 
   if (userInLobby) {
     components.push(
-      <div className='column is-1'>
-        <button className='button is-primary' onClick={() => toggleReadiness(!userInLobby.ready)}>
+      <div key='readyButton' className='column is-1'>
+        <button key='readyButton' className='button is-primary' onClick={() => toggleReadiness(!userInLobby.ready)}>
           {userInLobby.ready ? 'Not Ready!' : 'Ready!'}
         </button>
       </div>
     );
     components.push(
-      <div className='column is-1'>
+      <div key='leaveButton' className='column is-1'>
         <button className='button is-primary' onClick={leaveLobby}>
           Leave
         </button>
@@ -133,7 +133,7 @@ function LobbyActions() {
     );
   } else {
     components.push(
-      <div className='column is-1'>
+      <div key='joinButton' className='column is-1'>
         <button className='button is-primary' onClick={joinLobby}>
           Join
         </button>
@@ -143,7 +143,7 @@ function LobbyActions() {
 
   return (
     <div className='container is-fluid'>
-      <div className='columns'>{components.map(c => c)}</div>
+      <div className='columns'>{components}</div>
     </div>
   );
 }
