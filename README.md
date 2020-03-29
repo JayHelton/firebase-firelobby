@@ -38,7 +38,7 @@ yarn add firebase reactfire
 yarn add bulma
 ```
 
-## 3. Activate Reacts Concurrent Mode
+## 3. Enable Reacts Concurrent Mode
 
 ### What Is Concurrent Mode?
 
@@ -370,13 +370,13 @@ function Lobby() {
 // Omitted
 ```
 
-`useUser` is the only new ReactFire method used here. It allows your component to subscribe the authenticated user data in the `firebase.auth` feature.
+`useUser` is the only new ReactFire method used here. It allows your component to subscribe to the authenticated user data in the `firebase.auth` feature.
 
 We should now be able to join and leave our lobby, as well as mark ourselves as "ready" or "not ready", all while reliably handling blocking actions with non-blocking alternatives.
 
 ## 10. Extra Credit - Refactor using the Context API
 
-In this extra step, we will refactor our methods and data for the lobby towards using the Context API. This is one way to centralize our lobby data and the methods for interacting with the lobby. This refactor would allow us to split our lobby component up without having to pass props down the tree.
+In this extra step, we will refactor our methods and data for the lobby using the Context API. This is one way to centralize our lobby data and the methods for interacting with the lobby. This refactor would allow us to split our lobby component up without having to pass props down the tree.
 
 First, we create a LobbyContext and a component to provide that context.
 
@@ -469,3 +469,9 @@ function LobbyActions() {
 ```
 
 Previously, we used ternaries and boolean expressions to determine what UI to render. Here, we are creating a component array and conditionally adding JSX to the array. Finally, we map it in our return JSX. This gives you an idea of how flexible and powerful React's rendering can be.
+
+## The End!
+
+We have succesfully built a small application using ReactFire and React's experimental concurrent mode. Thanks to the React Hook API, all of the ReactFire hooks will cause our components to re-render whenever there are changes in the observable data from Firebase without the need to define logic in our components lifecycle hooks.
+
+I highly recommend checking our ReactFire's [API reference](https://github.com/FirebaseExtended/reactfire/blob/master/docs/reference.md) and exploring more ways to complete the above goals.
