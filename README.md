@@ -80,7 +80,7 @@ First, we create a firebase config in `index.js` and surround our application wi
 
 import { FirebaseAppProvider } from 'reactfire';
 
-/// Omitted
+// Omitted
 
 const firebaseConfig = {
   // Retrieved from the firebase console
@@ -93,7 +93,7 @@ function App() {
     </FirebaseAppProvider>
   );
 }
-/// Omitted
+// Omitted
 ```
 
 Now our component tree within `FirebaseAppProvider` will have access to the hooks created in ReactFire.
@@ -144,7 +144,8 @@ function AuthenticationButtons() {
 Next, we will add our new component to a nav bar and add that navbar to the main App function.
 
 ```javascript
-/// Omitted
+// Omitted
+
 function Navbar() {
   return (
     <nav className='navbar'>
@@ -162,7 +163,8 @@ function Navbar() {
     </nav>
   );
 }
-/// Omitted
+
+// Omitted
 ```
 
 ```javascript
@@ -173,7 +175,7 @@ import React from 'react';
 import { createRoot } from 'react-dom';
 import { AuthCheck, FirebaseAppProvider, useAuth, SuspenseWithPerf } from 'reactfire';
 
-/// Omitted
+// Omitted
 
 function App() {
   return (
@@ -184,7 +186,7 @@ function App() {
   );
 }
 
-/// Omitted
+// Omitted
 ```
 
 Now run the app with `yarn start`. The application should fail to render, throwing this error in the console.
