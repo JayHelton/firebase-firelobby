@@ -13,7 +13,16 @@ import {
   useUser,
 } from 'reactfire';
 
-const firebaseConfig = {};
+const firebaseConfig = {
+  apiKey: '',
+  authDomain: '',
+  databaseURL: '',
+  projectId: '',
+  storageBucket: '',
+  messagingSenderId: '',
+  appId: '',
+  measurementId: ''
+};
 
 function AuthenticationButtons() {
   const auth = useAuth();
