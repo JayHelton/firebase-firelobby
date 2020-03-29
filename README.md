@@ -2,7 +2,7 @@
 
 ## New To Firebase?
 
-This tutorial is aimed towards developers who have some prior experience towards React, Firebase and Firestore. The rest of this tutorial makes the assumption that the reader can setup a new Firebase project with Firstore and Authentication, locate their web config, and understands basic concepts in React. If you are a beginner to Firebase, I highlt recommend [this video](https://www.youtube.com/watch?v=9kRgVxULbag) by [Fireship](fireship.io).
+This tutorial is aimed towards developers who have some prior experience towards React, Firebase, and Firestore. The rest of this tutorial makes the assumption that the reader can setup a new Firebase project with Firstore and Authentication, locate their web config, and understands basic concepts in React. If you are a beginner to Firebase, I highly recommend [this video](https://www.youtube.com/watch?v=9kRgVxULbag) by [Fireship](fireship.io).
 
 If you are new to React, there are a plethora of beginner React tutorials on Youtube as well.
 
