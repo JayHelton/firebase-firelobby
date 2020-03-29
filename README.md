@@ -468,4 +468,4 @@ function LobbyActions() {
 }
 ```
 
-Previously, we used ternaries and boolean expressions to determine what UI to render. Here, we are creating a component array and conditionally adding JSX to the array. Finally, we map it in our return JSX. This gives you an idea of how flexible and powerful Reacts rendering can be.
+Previously, we used ternaries and boolean expressions to determine what UI to render. Here, we are creating a component array and conditionally adding JSX to the array. Finally, we map it in our return JSX. This gives you an idea of how flexible and powerful React's rendering can be.
