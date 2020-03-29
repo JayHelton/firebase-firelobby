@@ -432,6 +432,8 @@ function LobbyProvider(props) {
 Next, we will use the [`useContext`](https://reactjs.org/docs/hooks-reference.html#usecontext) hook and split our lobby component into two components. Here, I have explored a different pattern for dynamically adding components to the `LobbyActions` component.
 
 ```javascript
+// Omitted
+
 function Lobby() {
   const { lobby } = useContext(LobbyContext);
 
