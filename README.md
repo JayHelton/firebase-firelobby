@@ -141,7 +141,7 @@ function AuthenticationButtons() {
 
 `AuthCheck` is a component that will render its children whenever the user is authenticated, otherwise it will render JSX passed into the `fallback` prop. This is the same pattern used by the React Concurrent mode feature called `Suspense`, which will be used momentarily.
 
-Next, we will add our new component to a nav bar and add that navbar to the main App function.
+Next, we will add our new component to a navbar and add that navbar to the main App function.
 
 ```javascript
 // Omitted
