@@ -10,7 +10,7 @@ import {
   useAuth,
   useFirestore,
   useFirestoreCollectionData,
-  useUser,
+  useUser
 } from 'reactfire';
 
 const firebaseConfig = {

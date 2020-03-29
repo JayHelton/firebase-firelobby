@@ -203,15 +203,17 @@ Arguably one of the more exciting features of React's Concurrent Mode is [Suspen
 
 > Disclaimer, there are a lot of nuances and concepts behind Concurrent Mode and Suspense that are not exclusive to React and could be considered advanced topics. I highly recommend [this article](https://www.swyx.io/writing/react-outside/) and the React Suspense [presentation](https://www.swyx.io/speaking/react-suspense/) linked within it.
 
-ReactFire uses the Suspense API in order to make "contracts" with React to provided an asyncronous friendly experience.
+ReactFire uses the Suspense API in order to make "contracts" with React to provided an asynchronous friendly experience.
 
-Suspense allows developers to easily specify a "loading" state while waiting on asyncronous tasks. In other words, when we have an action that is considered "blocking", such as a request for data, we must provide a "non-blocking" version. This non-blocking version is called a "fallback" in Suspense.
+Suspense allows developers to easily specify a "loading" state while waiting on asynchronous tasks. In other words, when we have an action that is considered "blocking", such as a request for data, we must provide a "non-blocking" version. This non-blocking version is called a "fallback" in Suspense.
 
 The error above tells us that the `AuthenticationButtons` component was suspended (or "blocked") while rendering and that a fallback (or "non-blocking" path) was not provided.
 
 We will add `Suspense` with a fallback to our component tree.
 
 ```javascript
+import React, { Suspense } from 'react';
+
 // Omitted
 
 function App() {
