@@ -478,6 +478,6 @@ Previously, we used ternaries and boolean expressions to determine what UI to re
 
 ## The End!
 
-We have succesfully built a small application using ReactFire and React's experimental concurrent mode. Thanks to the React Hook API, all of the ReactFire hooks will cause our components to re-render whenever there are changes in the observable data from Firebase. There is no need to define logic in our components lifecycle hooks to trigger rendering.
+We have successfully built a small application using ReactFire and React's experimental concurrent mode. Thanks to the React Hook API, all of the ReactFire hooks will cause our components to re-render whenever there are changes in the observable data from Firebase. There is no need to define logic in our components lifecycle hooks to trigger rendering.
 
 I highly recommend checking our ReactFire's [API reference](https://github.com/FirebaseExtended/reactfire/blob/master/docs/reference.md) and exploring more ways to complete the above goals.
