@@ -307,7 +307,7 @@ function App() {
 // Omitted
 ```
 
-`useFirestore` allows us to lazily load the firestore feature from firebase, using the config provided by `FirebaseAppProvider`. This returns `firebase.firestore`.
+`useFirestore` allows us to lazily load the firestore feature from firebase using the config provided by `FirebaseAppProvider`. This returns `firebase.firestore`.
 
 `useFirestoreCollectionData` is a hook that allows our components to subscribe to the changes within the firestore collection.
 
