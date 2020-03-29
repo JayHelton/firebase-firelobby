@@ -2,7 +2,7 @@
 
 ## New To Firebase?
 
-This tutorial is aimed towards developers who have some prior experience towards React, Firebase, and Firestore. The rest of this tutorial makes the assumption that the reader can setup a new Firebase project with Firstore and Authentication, locate their web config, and understands basic concepts in React. If you are a beginner to Firebase, I highly recommend [this video](https://www.youtube.com/watch?v=9kRgVxULbag) by [Fireship](fireship.io).
+This tutorial is aimed towards developers who have some prior experience towards React, Firebase, and Firestore. The rest of this tutorial makes the assumption that the reader can setup a new Firebase project with Firestore and Authentication, locate their web config, and understands basic concepts in React. If you are a beginner to Firebase, I highly recommend [this video](https://www.youtube.com/watch?v=9kRgVxULbag) by [Fireship](fireship.io).
 
 If you are new to React, there are a plethora of beginner React tutorials on Youtube as well.
 
@@ -25,7 +25,7 @@ Our goal is to make a simple React app that showcases ReactFire and React's new 
 
 ```shell
 npx create-react-app firelobby
-cd firelobyy
+cd firelobby
 ```
 
 Install React Experimental Build
@@ -96,7 +96,7 @@ Now our component tree within `FirebaseAppProvider` will have access to the hook
 
 ## 5. Authentication
 
-First, we will create an `AuthenticationButtons` component that will be repsonsible for enabling users to sign-in and sign-out of the application.
+First, we will create an `AuthenticationButtons` component that will be responsible for enabling users to sign-in and sign-out of the application.
 
 ```javascript
 import firebase from 'firebase';
@@ -197,7 +197,7 @@ Arguably one of the more exciting features of React's Concurrent Mode is [Suspen
 
 ReactFire uses the Suspense API in order to make "contracts" with React to provided an asyncronous friendly experience.
 
-Suspense allows developers to easily specifiy a "loading" state while waiting on asyncronous tasks. In other words, when we have an action that is considered "blocking", such as a request for data, we must provide a "non-blocking" version. This non-blocking version is called a "fallback" in Suspense.
+Suspense allows developers to easily specify a "loading" state while waiting on asyncronous tasks. In other words, when we have an action that is considered "blocking", such as a request for data, we must provide a "non-blocking" version. This non-blocking version is called a "fallback" in Suspense.
 
 The error above tells us that the `AuthenticationButtons` component was suspended (or "blocked") while rendering and that a fallback (or "non-blocking" path) was not provided.
 
@@ -302,7 +302,7 @@ Once we create a subscription to the firestore collection, we map the list of do
 
 Now that we would have a list of users in the lobby, we have a handful of interactions we need to create in order to join and leave our lobby, as well as a function to mark our user as "ready" or "not ready".
 
-We will create functions and action buttons to join and leave the lobby as well as a function to change the readiness of our user within the lobby. We will also create a variable to determine if our user is currently in the lobby, which will drive what buttons we show and hide.
+We will create functions and action buttons to join and leave the lobby, as well as a function to change the readiness of our user within the lobby. We will also create a variable to determine if our user is currently in the lobby, which will drive what buttons we show and hide.
 
 ```javascript
 // Omitted
@@ -478,6 +478,6 @@ Previously, we used ternaries and boolean expressions to determine what UI to re
 
 ## The End!
 
-We have succesfully built a small application using ReactFire and React's experimental concurrent mode. Thanks to the React Hook API, all of the ReactFire hooks will cause our components to re-render whenever there are changes in the observable data from Firebase without the need to define logic in our components lifecycle hooks.
+We have succesfully built a small application using ReactFire and React's experimental concurrent mode. Thanks to the React Hook API, all of the ReactFire hooks will cause our components to re-render whenever there are changes in the observable data from Firebase. There is no need to define logic in our components lifecycle hooks to trigger rendering.
 
 I highly recommend checking our ReactFire's [API reference](https://github.com/FirebaseExtended/reactfire/blob/master/docs/reference.md) and exploring more ways to complete the above goals.
