@@ -374,4 +374,4 @@ function Lobby() {
 
 We should now be able to join and leave our lobby, as well as mark ourselves as "ready" or "not ready", all while reliably handling blocking actions with non-blocking alternatives.
 
-## 10. Extra Credit
+## 10. Extra Credit - Reactor using the Context API
