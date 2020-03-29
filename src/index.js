@@ -1,7 +1,7 @@
 import 'bulma/css/bulma.css';
 
 import firebase from 'firebase';
-import React from 'react';
+import React, { useContext } from 'react';
 import { createRoot } from 'react-dom';
 import {
   AuthCheck,
@@ -57,7 +57,9 @@ function Navbar() {
   );
 }
 
-function Lobby() {
+const LobbyContext = React.createContext();
+
+function LobbyProvider(props) {
   const { email, displayName, uid } = useUser();
   const lobbyCollection = useFirestore().collection('lobby');
   const lobby = useFirestoreCollectionData(lobbyCollection);
@@ -77,6 +79,16 @@ function Lobby() {
   };
 
   return (
+    <LobbyContext.Provider value={{ userInLobby, lobby, joinLobby, leaveLobby, toggleReadiness }}>
+      {props.children}
+    </LobbyContext.Provider>
+  );
+}
+
+function Lobby() {
+  const { lobby } = useContext(LobbyContext);
+
+  return (
     <div className='container is-fluid'>
       {lobby.map(m => {
         return (
@@ -87,26 +99,42 @@ function Lobby() {
           </article>
         );
       })}
-      <div className='columns'>
-        {userInLobby && (
-          <div className='column is-1'>
-            <button className='button is-primary' onClick={() => toggleReadiness(!userInLobby.ready)}>
-              {userInLobby.ready ? 'Not Ready!' : 'Ready!'}
-            </button>
-          </div>
-        )}
-        <div className='column is-1'>
-          {userInLobby ? (
-            <button className='button is-primary' onClick={leaveLobby}>
-              Leave
-            </button>
-          ) : (
-            <button className='button is-primary' onClick={joinLobby}>
-              Join
-            </button>
-          )}
-        </div>
+    </div>
+  );
+}
+
+function LobbyActions() {
+  const { userInLobby, joinLobby, leaveLobby, toggleReadiness } = useContext(LobbyContext);
+  const components = [];
+
+  if (userInLobby) {
+    components.push(
+      <div className='column is-1'>
+        <button className='button is-primary' onClick={() => toggleReadiness(!userInLobby.ready)}>
+          {userInLobby.ready ? 'Not Ready!' : 'Ready!'}
+        </button>
       </div>
+    );
+    components.push(
+      <div className='column is-1'>
+        <button className='button is-primary' onClick={leaveLobby}>
+          Leave
+        </button>
+      </div>
+    );
+  } else {
+    components.push(
+      <div className='column is-1'>
+        <button className='button is-primary' onClick={joinLobby}>
+          Join
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className='container is-fluid'>
+      <div className='columns'>{components.map(c => c)}</div>
     </div>
   );
 }
@@ -117,7 +145,10 @@ function App() {
       <SuspenseWithPerf fallback={<p>Loading...</p>} traceId={'loading-app-status'}>
         <Navbar />
         <AuthCheck fallback={<p>Not Logged In...</p>}>
-          <Lobby></Lobby>
+          <LobbyProvider>
+            <Lobby></Lobby>
+            <LobbyActions />
+          </LobbyProvider>
         </AuthCheck>
       </SuspenseWithPerf>
     </FirebaseAppProvider>

@@ -70,7 +70,7 @@ Reactfire makes strong use of the React [Context](https://reactjs.org/docs/conte
 First, we create a firebase config in `index.js` and surround our application with the `FirebaseAppProvider` component
 
 ```javascript
-/// omitted
+/// Omitted
 
 const firebaseConfig = {
   // Retrieved from the firebase console
@@ -83,7 +83,7 @@ function App() {
     </FirebaseAppProvider>
   );
 }
-/// omitted
+/// Omitted
 ```
 
 Now our component tree within `FirebaseAppProvider` will have access to the hooks created in ReactFire.
@@ -134,7 +134,7 @@ function AuthenticationButtons() {
 Next, we will add our new component to a nav bar and add that navbar to the main App function.
 
 ```javascript
-/// omitted
+/// Omitted
 function Navbar() {
   return (
     <nav className='navbar'>
@@ -152,7 +152,7 @@ function Navbar() {
     </nav>
   );
 }
-/// omitted
+/// Omitted
 ```
 
 ```javascript
@@ -163,7 +163,7 @@ import React from 'react';
 import { createRoot } from 'react-dom';
 import { AuthCheck, FirebaseAppProvider, useAuth, SuspenseWithPerf } from 'reactfire';
 
-/// omitted
+/// Omitted
 function App() {
   return (
     <FirebaseAppProvider firebaseConfig={firebaseConfig}>
@@ -172,7 +172,7 @@ function App() {
     </FirebaseAppProvider>
   );
 }
-/// omitted
+/// Omitted
 ```
 
 Now run the app with `yarn start`. The application should fail to render, throwing this error in the console.
@@ -374,4 +374,98 @@ function Lobby() {
 
 We should now be able to join and leave our lobby, as well as mark ourselves as "ready" or "not ready", all while reliably handling blocking actions with non-blocking alternatives.
 
-## 10. Extra Credit - Reactor using the Context API
+## 10. Extra Credit - Refactor using the Context API
+
+In this extra step, we will refactor our methods and data for the lobby towards using the Context API. This is one way to centralize our lobby data and the methods for interacting with the lobby. This refactor would allow us to split our lobby component up without having to pass props down the tree.
+
+First, we create a LobbyContext and a component to provide that context.
+
+```javascript
+const LobbyContext = React.createContext();
+
+function LobbyProvider(props) {
+  const { email, displayName, uid } = useUser();
+  const lobbyCollection = useFirestore().collection('lobby');
+  const lobby = useFirestoreCollectionData(lobbyCollection);
+
+  const userInLobby = lobby.find(m => m.email === email);
+
+  const joinLobby = async () => {
+    await lobbyCollection.doc(uid).set({ email, displayName, ready: false });
+  };
+
+  const leaveLobby = async () => {
+    await lobbyCollection.doc(uid).delete();
+  };
+
+  const toggleReadiness = async newReadiness => {
+    await lobbyCollection.doc(uid).set({ ready: newReadiness }, { merge: true });
+  };
+
+  return (
+    <LobbyContext.Provider value={{ userInLobby, lobby, joinLobby, leaveLobby, toggleReadiness }}>
+      {props.children}
+    </LobbyContext.Provider>
+  );
+}
+```
+
+Next, we will use the `useContext` hook and split our lobby component into two components. Here, I have explored a different pattern for dynamically adding components to the `LobbyActions` component.
+
+```javascript
+function Lobby() {
+  const { lobby } = useContext(LobbyContext);
+
+  return (
+    <div className='container is-fluid'>
+      {lobby.map(m => {
+        return (
+          <article key={m.email} className='tile is-child notification'>
+            <p className='title'>
+              {m.displayName} - {m.ready ? 'Ready 🎮' : 'Not Ready ❌'}
+            </p>
+          </article>
+        );
+      })}
+    </div>
+  );
+}
+
+function LobbyActions() {
+  const { userInLobby, joinLobby, leaveLobby, toggleReadiness } = useContext(LobbyContext);
+  const components = [];
+
+  if (userInLobby) {
+    components.push(
+      <div className='column is-1'>
+        <button className='button is-primary' onClick={() => toggleReadiness(!userInLobby.ready)}>
+          {userInLobby.ready ? 'Not Ready!' : 'Ready!'}
+        </button>
+      </div>
+    );
+    components.push(
+      <div className='column is-1'>
+        <button className='button is-primary' onClick={leaveLobby}>
+          Leave
+        </button>
+      </div>
+    );
+  } else {
+    components.push(
+      <div className='column is-1'>
+        <button className='button is-primary' onClick={joinLobby}>
+          Join
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className='container is-fluid'>
+      <div className='columns'>{components.map(c => c)}</div>
+    </div>
+  );
+}
+```
+
+Previously, we used ternaries and boolean expressions to determine what UI to render. Here, we are creating a component array and conditionally adding JSX to the array. Finally, we map it in our return JSX. This gives you an idea of how flexible and powerful Reacts rendering can be.
