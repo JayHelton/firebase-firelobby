@@ -504,6 +504,7 @@ function App() {
       </SuspenseWithPerf>
     </FirebaseAppProvider>
   );
+}
 
 // Omitted
 ```
