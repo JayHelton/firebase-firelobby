@@ -8,7 +8,7 @@
     "@testing-library/user-event": "^7.1.2",
     "bulma": "^0.8.1",
     "firebase": "^7.13.1",
-    "react": "^0.0.0-experimental-aae83a4b9",
+    "react": "^0.14.0",
     "react-dom": "^0.0.0-experimental-aae83a4b9",
     "react-scripts": "3.4.1",
     "reactfire": "^2.0.3"
